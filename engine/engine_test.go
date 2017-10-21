@@ -22,7 +22,7 @@ func BenchmarkAdd(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		lat,lng := RandomPoint()
 		e.Add(&types.IndexedDocument{
-			DocId:uint64(i+80000),
+			DocId:uint64(i),
 			Latitude:lat,
 			Longitude:lng,
 			Fields:map[string]string{
