@@ -31,6 +31,7 @@ func (e *Engine) Init(option *types.EngineOptions) {
 
 	//初始化缓存器
 	e.cacher = &core.Cacher{}
+	e.cacher.Init()
 	//初始化索引器
 	e.indexer = &core.Indexer{}
 	e.indexer.Init(e.option.IndexerOption)
@@ -63,13 +64,18 @@ func (e *Engine) Remove(docid uint64) {
 	e.indexerRemoveChannels[shard] <- docid
 }
 
-func (e *Engine) Search(request *types.SearchRequest) (response *types.SearchResponse) {
+func (e *Engine) Search(request *types.SearchRequest) *types.SearchResponse {
 	content := fmt.Sprintf("%v", request)
 	hash := murmur.Murmur3(tobytes(content))
 
 	shard := int(hash - hash/uint32(e.option.NumShards)*uint32(e.option.NumShards))
 
 	cachekey := fmt.Sprintf("%v", hash)
+
+	if request.SearchOption == nil {
+		request.SearchOption = e.option.DefaultSearchOption
+	}
+
 	//是否刷新缓存
 	if !request.SearchOption.Refresh {
 		//从缓存取数据
@@ -149,6 +155,7 @@ func (e *Engine) Search(request *types.SearchRequest) (response *types.SearchRes
 	}
 
 	//拼返回数据
+	response := &types.SearchResponse{}
 	response.Count = count
 	if !request.CountOnly {
 		start := request.Offset
@@ -165,7 +172,7 @@ func (e *Engine) Search(request *types.SearchRequest) (response *types.SearchRes
 	}
 	response.Timeout = istimeout
 
-	return
+	return  response
 
 }
 

@@ -37,7 +37,7 @@ func (o *EngineOptions) Init() {
 			Refresh:  false,
 			OrderAsc: true,
 			Timeout:  2 * time.Second,
-			Accuracy: ACCURATE,
+			Accuracy: STANDARD,
 			Circles:  1,
 			Excepts:  nil,
 			Filter:   nil,
@@ -45,9 +45,9 @@ func (o *EngineOptions) Init() {
 	}
 	if o.IndexerOption == nil {
 		o.IndexerOption = &IndexerOptions{
-			RedisHost:     "127.0.0.1",
+			RedisHost:     "127.0.0.1:6379",
 			RedisPassword: "",
-			RedisDb:       0,
+			RedisDb:       3,
 			HashSize:      1000,
 			GeoShard:      5,
 			GeoPrecious:   5,
@@ -64,4 +64,5 @@ type IndexerOptions struct {
 	GeoPrecious     uint    //GEOHASH位数
 	CenterLatitude  float64 //城市中心纬度
 	CenterLongitude float64 //城市中心经度
+	Location string //城市
 }

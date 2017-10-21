@@ -27,8 +27,11 @@ func (i *Indexer) Init(option *types.IndexerOptions) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	//距离计算
 	i.measure = distanceMeasure.GetInstance()
-	i.measure.SetLocalEarthCoordinate(&distanceMeasure.EarthCoordinate{Latitude: option.CenterLatitude, Longitude: option.CenterLongitude})
+	if option.CenterLongitude != 0.0 && option.CenterLatitude != 0.0 {
+		i.measure.SetLocalEarthCoordinate(&distanceMeasure.EarthCoordinate{Latitude: option.CenterLatitude, Longitude: option.CenterLongitude}, option.Location)
+	}
 }
 
 func (i *Indexer) Add(doc *types.IndexedDocument) {
@@ -46,7 +49,7 @@ func (i *Indexer) Add(doc *types.IndexedDocument) {
 func (i *Indexer) Remove(docid uint64) {
 	sdocid := strconv.FormatUint(docid, 10)
 	hashs := i.hashshard(docid)
-	hash := i.client.HGet(hashs, sdocid).String()
+	hash, _ := i.client.HGet(hashs, sdocid).Result()
 	if len(hash) > 0 {
 		geos := i.geoshard(hash, docid)
 		pip := i.client.Pipeline()
@@ -120,9 +123,10 @@ func (i *Indexer) Search(countonly bool, hash string, latitude, longitude float6
 			}
 		}
 	}
-	return nil, 0
+	return
 }
 
+//距离计算
 func (i *Indexer) distance(accuracy int, alatitude, alongitude, blatitude, blongitude float64) float64 {
 	a := &distanceMeasure.EarthCoordinate{Latitude: alatitude, Longitude: alongitude}
 	b := &distanceMeasure.EarthCoordinate{Latitude: blatitude, Longitude: blongitude}

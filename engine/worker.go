@@ -19,17 +19,23 @@ type indexerSearchResponse struct {
 }
 
 func (e *Engine) indexerAddWorker(shard int) {
-	request := <-e.indexerAddChannels[shard]
-	e.indexer.Add(request)
+	for {
+		request := <-e.indexerAddChannels[shard]
+		e.indexer.Add(request)
+	}
 }
 
 func (e *Engine) indexerRemoveWorker(shard int) {
-	request := <-e.indexerRemoveChannels[shard]
-	e.indexer.Remove(request)
+	for {
+		request := <-e.indexerRemoveChannels[shard]
+		e.indexer.Remove(request)
+	}
 }
 
 func (e *Engine) indexerSearchWorker(shard int) {
-	request := <-e.indexerSearchChannels[shard]
-	docs, count := e.indexer.Search(request.countonly, request.hash, request.latitude, request.longitude, request.option)
-	request.indexerReturnChannel <- &indexerSearchResponse{docs: docs, count: count}
+	for{
+		request := <-e.indexerSearchChannels[shard]
+		docs, count := e.indexer.Search(request.countonly, request.hash, request.latitude, request.longitude, request.option)
+		request.indexerReturnChannel <- &indexerSearchResponse{docs: docs, count: count}
+	}
 }

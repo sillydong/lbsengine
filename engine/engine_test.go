@@ -5,7 +5,52 @@ import (
 	"github.com/huichen/murmur"
 	"testing"
 	"unsafe"
+	"math/rand"
+	"github.com/sillydong/lbsengine/types"
 )
+
+var e *Engine
+func init() {
+	e = &Engine{}
+	e.Init(nil)
+}
+
+func TestSearch(t *testing.T) {
+	result := e.Search(&types.SearchRequest{
+		Latitude: 40.7137674,
+		Longitude: -73.9525142,
+		Offset:0,
+		Limit:100,
+	})
+	fmt.Printf("%+v\n",result)
+}
+
+func BenchmarkSearch(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		e.Search(&types.SearchRequest{
+			Latitude:  40.7137674,
+			Longitude: -73.9525142,
+			Offset:    0,
+			Limit:     100,
+		})
+	}
+}
+
+
+func randomPoints(n int) [][2]float64 {
+	var points [][2]float64
+	for i := 0; i < n; i++ {
+		lat, lon := RandomPoint()
+		points = append(points, [2]float64{lat, lon})
+	}
+	return points
+}
+
+func RandomPoint() (lat, lng float64) {
+	lat = -90 + 180*rand.Float64()
+	lng = -180 + 360*rand.Float64()
+	return
+}
 
 func TestParse(t *testing.T) {
 	t.Logf("%+v", []byte(fmt.Sprintf("%d", 1234567890)))

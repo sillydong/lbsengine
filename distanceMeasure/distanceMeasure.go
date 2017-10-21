@@ -17,7 +17,7 @@ var localMeasure *DistanceMeasure = nil
 
 type DistanceMeasure struct {
 	IsSetLocation bool            //是否设置了本地基准经纬度
-	Benchmark     EarthCoordinate //基准坐标
+	Benchmark     *EarthCoordinate //基准坐标
 	cosLatitude   float64         //math.Cos(Benchmark.latitude) 基准维度的cos值
 	cityName      string          //城市名，可以不填，打印使用的
 	IsFirstUse    bool            //是否是第一次使用，在GetInstance使用后置为ture
@@ -40,14 +40,14 @@ func GetInstance() *DistanceMeasure {
 	if localMeasure == nil {
 		localMeasure = new(DistanceMeasure)
 		localMeasure.IsSetLocation = false
-		localMeasure.Benchmark = EarthCoordinate{0.0, 0.0}
+		localMeasure.Benchmark = &EarthCoordinate{0.0, 0.0}
 	}
 	localMeasure.IsFirstUse = true
 	return localMeasure
 }
 
 //设置本地的基准坐标，可以取一个城市的市中心，EarthCoordinate必须要输入所在城市的经纬度坐标，name值（城市名）可以为空
-func (this *DistanceMeasure) SetLocalEarthCoordinate(location EarthCoordinate, name string) {
+func (this *DistanceMeasure) SetLocalEarthCoordinate(location *EarthCoordinate, name string) {
 	this.IsSetLocation = true                                                //已设置坐标
 	this.Benchmark = location                                                //用于QuickMethod的本地经纬度坐标
 	this.cityName = name                                                     //城市名，打印使用
