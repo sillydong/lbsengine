@@ -1,4 +1,4 @@
-package main
+package dbtest
 
 import (
 	"math"
@@ -20,5 +20,7 @@ func TestEarthPoint(pt1, pt2 EarthCoordinate){
 	y1 := RADIUS * math.Cos(ChangeAngleToRadian(pt1.latitude)) * math.Sin(ChangeAngleToRadian(pt1.longitude))
 	z1 := RADIUS * math.Sin(ChangeAngleToRadian(pt1.latitude))
 	
-	
+	x2 := RADIUS * math.Cos(ChangeAngleToRadian(pt2.latitude)) * math.Cos(ChangeAngleToRadian(pt2.longitude))
+	y2 := RADIUS * math.Cos(ChangeAngleToRadian(pt2.latitude)) * math.Sin(ChangeAngleToRadian(pt2.longitude))
+	z2 := RADIUS * math.Sin(ChangeAngleToRadian(pt2.latitude))
 }
