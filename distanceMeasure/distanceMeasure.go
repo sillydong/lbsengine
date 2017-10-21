@@ -31,8 +31,8 @@ func (e MeasureError) Error() string {
 }
 
 type EarthCoordinate struct {
-	longitude float64 //经度坐标 东经为正数，西经为负数
-	latitude  float64 //纬度坐标 北纬为正数，南纬为负数
+	Longitude float64 //经度坐标 东经为正数，西经为负数
+	Latitude  float64 //纬度坐标 北纬为正数，南纬为负数
 }
 
 //返回单例
@@ -51,19 +51,19 @@ func (this *DistanceMeasure) SetLocalEarthCoordinate(location EarthCoordinate, n
 	this.IsSetLocation = true                                                //已设置坐标
 	this.Benchmark = location                                                //用于QuickMethod的本地经纬度坐标
 	this.cityName = name                                                     //城市名，打印使用
-	this.cosLatitude = math.Cos(this.ChangeAngleToRadian(location.latitude)) //基准维度的cos值
+	this.cosLatitude = math.Cos(this.ChangeAngleToRadian(location.Latitude)) //基准维度的cos值
 }
 
 func (this *DistanceMeasure) ChangeAngleToRadian(angle float64) float64 {
 	return angle / 180.0 * math.Pi
 }
 
-func (this *DistanceMeasure) MeasureByStardardMethod(pt1, pt2 EarthCoordinate) float64 {
+func (this *DistanceMeasure) MeasureByStardardMethod(pt1, pt2 *EarthCoordinate) float64 {
 	//先把角度转成弧度
-	lon1 := this.ChangeAngleToRadian(pt1.longitude)
-	lat1 := this.ChangeAngleToRadian(pt1.latitude)
-	lon2 := this.ChangeAngleToRadian(pt2.longitude)
-	lat2 := this.ChangeAngleToRadian(pt2.latitude)
+	lon1 := this.ChangeAngleToRadian(pt1.Longitude)
+	lat1 := this.ChangeAngleToRadian(pt1.Latitude)
+	lon2 := this.ChangeAngleToRadian(pt2.Longitude)
+	lat2 := this.ChangeAngleToRadian(pt2.Latitude)
 	//因为cos余弦函数是偶函数，所以lon2-lon1还是lon1-lon2都一样
 	//得到距离的弧度值
 	radDist := math.Acos(math.Sin(lat1)*math.Sin(lat2) + math.Cos(lat1)*math.Cos(lat2)*math.Cos(lon2-lon1))
@@ -71,17 +71,17 @@ func (this *DistanceMeasure) MeasureByStardardMethod(pt1, pt2 EarthCoordinate) f
 }
 
 //未提前设置本地城市经纬度坐标的快速测距算法
-func (this *DistanceMeasure) MeasureByQuickMethodWithoutLocation(pt1, pt2 EarthCoordinate) float64 {
-	diffLat := (pt1.latitude - pt2.latitude) //纬度差的实际距离，单位m
-	radLat := this.ChangeAngleToRadian((pt1.latitude + pt2.latitude) / 2)
-	diffLog := math.Cos(radLat) * (pt1.longitude - pt2.longitude) //经度差的实际距离，单位m,需要乘以cos(所在纬度),因为纬度越高时经度差的表示的实际距离越短
+func (this *DistanceMeasure) MeasureByQuickMethodWithoutLocation(pt1, pt2 *EarthCoordinate) float64 {
+	diffLat := (pt1.Latitude - pt2.Latitude) //纬度差的实际距离，单位m
+	radLat := this.ChangeAngleToRadian((pt1.Latitude + pt2.Latitude) / 2)
+	diffLog := math.Cos(radLat) * (pt1.Longitude - pt2.Longitude) //经度差的实际距离，单位m,需要乘以cos(所在纬度),因为纬度越高时经度差的表示的实际距离越短
 	//根据勾股定理
 	dist := DIST_PER_DEGREE * math.Sqrt(diffLat*diffLat+diffLog*diffLog)
 	return dist
 }
 
 //已提前设置本地城市经纬度坐标的快速测距算法
-func (this *DistanceMeasure) MeasureByQuickMethod(pt1, pt2 EarthCoordinate) (float64, error) {
+func (this *DistanceMeasure) MeasureByQuickMethod(pt1, pt2 *EarthCoordinate) (float64, error) {
 	//先判断是否已经输入了本地基准经纬度坐标
 	if this.IsSetLocation == false {
 		return 0.0, MeasureError{}
@@ -90,22 +90,22 @@ func (this *DistanceMeasure) MeasureByQuickMethod(pt1, pt2 EarthCoordinate) (flo
 		this.IsFirstUse = false
 		//第一次调用这个函数的时候打印城市名进行提示
 		var strLon, strLat string
-		if this.Benchmark.longitude >= 0 {
-			strLon = fmt.Sprintf("东经%f°", this.Benchmark.longitude)
+		if this.Benchmark.Longitude >= 0 {
+			strLon = fmt.Sprintf("东经%f°", this.Benchmark.Longitude)
 		} else {
-			strLon = fmt.Sprintf("西经%f°", -this.Benchmark.longitude)
+			strLon = fmt.Sprintf("西经%f°", -this.Benchmark.Longitude)
 		}
-		if this.Benchmark.latitude >= 0 {
-			strLat = fmt.Sprintf("北纬%f°", this.Benchmark.latitude)
+		if this.Benchmark.Latitude >= 0 {
+			strLat = fmt.Sprintf("北纬%f°", this.Benchmark.Latitude)
 		} else {
-			strLat = fmt.Sprintf("南纬%f°", -this.Benchmark.latitude)
+			strLat = fmt.Sprintf("南纬%f°", -this.Benchmark.Latitude)
 		}
 		fmt.Printf("本次快速测距算法设置的城市为%s,输入的基准经纬度坐标为[%s, %s]", this.cityName, strLon, strLat)
 		fmt.Println("如果当前保存的城市与你期望的城市不符，请重新调用SetLocalEarthCoordinate来设置")
 	}
 
-	diffLat := (pt1.latitude - pt2.latitude)                      //纬度差的实际距离，单位m
-	diffLog := this.cosLatitude * (pt1.longitude - pt2.longitude) //经度差的实际距离，单位m,需要乘以cos(所在纬度),因为纬度越高时经度差的表示的实际距离越短
+	diffLat := (pt1.Latitude - pt2.Latitude)                      //纬度差的实际距离，单位m
+	diffLog := this.cosLatitude * (pt1.Longitude - pt2.Longitude) //经度差的实际距离，单位m,需要乘以cos(所在纬度),因为纬度越高时经度差的表示的实际距离越短
 	distance := DIST_PER_DEGREE * math.Sqrt(diffLat*diffLat+diffLog*diffLog)
 	return distance, nil
 }
