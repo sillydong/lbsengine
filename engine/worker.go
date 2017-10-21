@@ -5,6 +5,7 @@ import (
 )
 
 type indexerSearchRequest struct{
+	countonly bool
 	hash string
 	latitude float64
 	longitude float64
@@ -13,22 +14,22 @@ type indexerSearchRequest struct{
 }
 
 type indexerSearchResponse struct{
-	docs *types.ScoredDocuments
+	docs types.ScoredDocuments
 	count int
 }
 
 func (e *Engine)indexerAddWorker(shard int){
 	request := <-e.indexerAddChannels[shard]
-	e.indexers[shard].Add(request)
+	e.indexer.Add(request)
 }
 
 func (e *Engine)indexerRemoveWorker(shard int){
 	request := <- e.indexerRemoveChannels[shard]
-	e.indexers[shard].Remove(request)
+	e.indexer.Remove(request)
 }
 
 func (e *Engine)indexerSearchWorker(shard int){
 	request := <-e.indexerSearchChannels[shard]
-	docs,count := e.indexers[shard].Search(request.hash,request.latitude,request.longitude,request.option)
+	docs,count := e.indexer.Search(request.countonly,request.hash,request.latitude,request.longitude,request.option)
 	request.indexerReturnChannel<-&indexerSearchResponse{docs:docs,count:count}
 }

@@ -7,8 +7,8 @@ type SearchRequest struct {
 	Latitude float64
 	Longitude float64
 	CountOnly bool
-	Offset int64
-	Limit int64
+	Offset int
+	Limit int
 	SearchOption *SearchOptions //可留空，使用引擎默认参数
 }
 
@@ -19,12 +19,13 @@ type SearchOptions struct{
 	Timeout time.Duration
 	Accuracy int //计算进度
 	Circles int //圈数，默认1，不扩散
-	Excepts map[int64]bool //排除指定ID
+	Excepts map[uint64]bool //排除指定ID
 	Filter func(doc IndexedDocument)bool
 }
 
 const (
 	_ = iota
-	ACCURATE
-	APPROX
+	STANDARD //传统计算方法
+	MEITUAN //美团开放计算方法
+	IMPROVED //优化的计算方法
 )

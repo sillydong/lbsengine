@@ -9,10 +9,10 @@ import (
 
 const TEST_DATA_NUM = 5000000
 
-var arrPoint1 [TEST_DATA_NUM]EarthCoordinate                                           //测试数据组1
-var arrPoint2 [TEST_DATA_NUM]EarthCoordinate                                           //测试数据组2
+var arrPoint1 [TEST_DATA_NUM]*EarthCoordinate                                           //测试数据组1
+var arrPoint2 [TEST_DATA_NUM]*EarthCoordinate                                           //测试数据组2
 var precision float64 = 0.1                                                            //随机数生成的精度大小
-var benchmarkPoint EarthCoordinate = EarthCoordinate{longitude: 121.0, latitude: 31.0} //基准值
+var benchmarkPoint EarthCoordinate = EarthCoordinate{Longitude: 121.0, Latitude: 31.0} //基准值
 var resultStardard, resultQuick, resultQuick2 [TEST_DATA_NUM]float64                   //各个算法的测距后得到的结果
 
 func init() {
@@ -24,12 +24,12 @@ func init() {
 	for i := 0; i < TEST_DATA_NUM; i++ {
 		//随机生成1000000组经纬度坐标
 		//以1000000为除数求余，然后把得到的余数再与除以1000000作为benchmarkPoint的小数部分
-		tmpPoint.latitude = benchmarkPoint.latitude + float64(rand.Intn(1000000))/1000000*precision
-		tmpPoint.longitude = benchmarkPoint.longitude + float64(rand.Intn(1000000))/1000000*precision
-		arrPoint1[i] = tmpPoint
-		tmpPoint.latitude = benchmarkPoint.latitude + float64(rand.Intn(1000000))/1000000*precision
-		tmpPoint.longitude = benchmarkPoint.longitude + float64(rand.Intn(1000000))/1000000*precision
-		arrPoint2[i] = tmpPoint
+		tmpPoint.Latitude = benchmarkPoint.Latitude + float64(rand.Intn(1000000))/1000000*precision
+		tmpPoint.Longitude = benchmarkPoint.Longitude + float64(rand.Intn(1000000))/1000000*precision
+		arrPoint1[i] = &tmpPoint
+		tmpPoint.Latitude = benchmarkPoint.Latitude + float64(rand.Intn(1000000))/1000000*precision
+		tmpPoint.Longitude = benchmarkPoint.Longitude + float64(rand.Intn(1000000))/1000000*precision
+		arrPoint2[i] = &tmpPoint
 	}
 }
 
