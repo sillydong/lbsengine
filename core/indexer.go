@@ -54,7 +54,7 @@ func (i *Indexer) Remove(docid uint64) {
 	}
 }
 
-func (i *Indexer) Search(latitude,longitude float64,options *types.SearchOptions) (docs types.ScoredDocuments,count int){
+func (i *Indexer) Search(hash string,latitude,longitude float64,options *types.SearchOptions) (docs *types.ScoredDocuments,count int){
 	return nil,0
 }
 

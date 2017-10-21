@@ -6,7 +6,7 @@ import (
 )
 
 type EngineOptions struct {
-	NumShards           int //channel分片
+	NumShards           uint32 //channel分片
 	AddBuffer           int //add channel长度
 	RemoveBuffer        int //remove channel长度
 	SearchBuffer        int //channel长度

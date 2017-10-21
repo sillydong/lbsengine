@@ -2,8 +2,6 @@ package engine
 
 import (
 	"github.com/sillydong/lbsengine/types"
-	"github.com/sillydong/lbsengine/core"
-	"bytes"
 )
 
 type indexerSearchRequest struct{
