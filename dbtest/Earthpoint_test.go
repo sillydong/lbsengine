@@ -3,6 +3,7 @@ package dbtest
 import (
 	"fmt"
 	"math"
+	"testing"
 )
 
 const RADIUS = 1.0
@@ -29,7 +30,7 @@ func CalEarthPoint(pt1, pt2 EarthCoordinate) {
 	fmt.Printf("x1 = %f, y1 = %f, z1 = %f\nx2 = %f, y2 = %f, z2 = %f\ndistance = %f", x1, y1, z1, x2, y2, z2, distance)
 }
 
-func Test_EarthPoint() {
+func Test_EarthPoint(t *testing.T) {
 	p1a, p2a := EarthCoordinate{longitude: 100.0, latitude: 20.0}, EarthCoordinate{longitude: 130.0, latitude: 40.0}
 	p1b, p2b := EarthCoordinate{longitude: 170.0, latitude: 20.0}, EarthCoordinate{longitude: -160.0, latitude: 40.0}
 	p1c, p2c := EarthCoordinate{longitude: 170.0, latitude: -20.0}, EarthCoordinate{longitude: -160.0, latitude: -40.0}

@@ -6,7 +6,7 @@ import (
 )
 
 type EngineOptions struct {
-	NumShards           uint32 //channel分片
+	NumShards           int //channel分片
 	AddBuffer           int //add channel长度
 	RemoveBuffer        int //remove channel长度
 	SearchBuffer        int //channel长度
@@ -26,8 +26,8 @@ func (o *EngineOptions) Init() {
 	if o.RemoveBuffer == 0 {
 		o.RemoveBuffer = runtime.NumCPU()
 	}
-	if o.SearchBuffer ==0 {
-		o.SearchBuffer = 10*runtime.NumCPU()
+	if o.SearchBuffer == 0 {
+		o.SearchBuffer = 10 * runtime.NumCPU()
 	}
 	if o.SearchWorkerThreads == 0 {
 		o.SearchWorkerThreads = 9 //9个neighbor格子
@@ -35,9 +35,9 @@ func (o *EngineOptions) Init() {
 	if o.DefaultSearchOption == nil {
 		o.DefaultSearchOption = &SearchOptions{
 			Refresh:  false,
-			OrderAsc: true,
+			OrderDesc: false,
 			Timeout:  2 * time.Second,
-			Accuracy: ACCURATE,
+			Accuracy: STANDARD,
 			Circles:  1,
 			Excepts:  nil,
 			Filter:   nil,
@@ -45,9 +45,9 @@ func (o *EngineOptions) Init() {
 	}
 	if o.IndexerOption == nil {
 		o.IndexerOption = &IndexerOptions{
-			RedisHost:     "127.0.0.1",
+			RedisHost:     "127.0.0.1:6379",
 			RedisPassword: "",
-			RedisDb:       0,
+			RedisDb:       3,
 			HashSize:      1000,
 			GeoShard:      5,
 			GeoPrecious:   5,
@@ -56,10 +56,13 @@ func (o *EngineOptions) Init() {
 }
 
 type IndexerOptions struct {
-	RedisHost     string
-	RedisPassword string
-	RedisDb       int
-	HashSize      uint64 //hash分片大小
-	GeoShard      uint64 //GEOHASH分片大小
-	GeoPrecious   uint   //GEOHASH位数
+	RedisHost       string
+	RedisPassword   string
+	RedisDb         int
+	HashSize        uint64  //hash分片大小
+	GeoShard        uint64  //GEOHASH分片大小
+	GeoPrecious     uint    //GEOHASH位数
+	CenterLatitude  float64 //城市中心纬度
+	CenterLongitude float64 //城市中心经度
+	Location string //城市
 }
