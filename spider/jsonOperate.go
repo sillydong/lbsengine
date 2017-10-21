@@ -30,10 +30,15 @@ func ReadFromJson(body []byte) (datas []PoiData) {
 			for _, elem := range data {
 				switch elem := elem.(type) {
 				case map[string]interface{}:
+					id, _ := elem["id"]
 					name, _ := elem["name"]
 					location, _ := elem["location"]
 					fmt.Println(name, location)
 					data := PoiData{}
+					switch id := id.(type) {
+					case string:
+						data.ID = id
+					}
 					switch name := name.(type) {
 					case string:
 						data.Name = name

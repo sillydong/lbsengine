@@ -10,6 +10,7 @@ import (
 )
 
 type PoiData struct {
+	ID         string                          //唯一标识符
 	Name       string                          //兴趣点的名字
 	Location   string                          //字符串形式的坐标
 	Coordinate distanceMeasure.EarthCoordinate //EarthCoordinate形式的坐标
@@ -74,11 +75,12 @@ func GetPOIData(pageId string) []PoiData {
 	pUrl.AddParam("city", "shanghai")
 	pUrl.AddParam("key", "7ffc2abae565cdb9302ebaef2e45c572")
 	pUrl.AddParam("extensions", "all")
-
+	pUrl.AddParam("page", pageId)
 	//获取数字签名的MD5值
 	sig := pUrl.GetMD5Sign("f66d435f57cb361630f2110a97aa4fd9")
 	pUrl.AddParam("sig", sig)
 	finalUrl := pUrl.GetFinalURL()
+	fmt.Println("final url: ", finalUrl)
 	resp, err := http.Get(finalUrl)
 	if err != nil {
 		fmt.Println("post错误:", err)
