@@ -1,5 +1,14 @@
-import {get,post} from "@/utils/fetch";
+import {get,post,del} from "@/utils/fetch";
 
-export function api(params){
-  return get('/api/query',params)
+export function api_add(form){
+  return post('/api/add',form)
 }
+
+export function api_del(id){
+  return del('/api/del/'+id)
+}
+
+export function api_query(params){
+  return get("/api/query",params)
+}
+

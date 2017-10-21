@@ -8,6 +8,11 @@
     <ul v-infinite-scroll="loadmore" infinite-scroll-disabled="loading"
         infinite-scroll-distance="10">
       <li v-for="item in list">
+        <div class="line">
+          <div>{{item.DocId}}.{{ item.Model.Name }}</div>
+          <div>Lat:{{ item.Model.Latitude}} Lng:{{ item.Model.Longitude }}</div>
+          <div>Distance: {{ item.Distance}}</div>
+        </div>
 
       </li>
     </ul>
@@ -16,7 +21,7 @@
 
 <script>
   //import { mapState, mapActions, mapMutations } from 'vuex';
-  import {api} from "@/api/example"
+  import {api_query} from "@/api/example"
 
   export default {
     components: {},
@@ -59,10 +64,10 @@
     methods: {
       loadmore() {
         if(this.query.latitude!==0.0 && this.query.longitude!==0.0){
-          api(this.query).then(response => {
-            let items = response.data
+          api_query(this.query).then(response => {
+            let items = response.data.Docs
             if (items.length > 0) {
-              for (let i = 1; i < items.length; i++) {
+              for (let i = 0; i < items.length; i++) {
                 this.list.push(items[i])
               }
               this.query.offset += 10
@@ -89,5 +94,11 @@
 <style scoped>
   .amap-demo {
     height:100px;
+  }
+  .line{
+    text-align: left;
+  }
+  ul{
+    -webkit-padding-start: 20px;
   }
 </style>

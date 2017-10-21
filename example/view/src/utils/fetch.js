@@ -21,7 +21,7 @@ service.interceptors.request.use((config) => {
 }, (error) => {
   // Do something with request error
   console.log(error); // for debug
-  MessageBox.alert("请求失败",error);
+  MessageBox.alert("请求失败5",error);
   return Promise.reject(error);
 });
 
@@ -31,20 +31,19 @@ service.interceptors.response.use(
       Indicator.close()
       console.log(response.data)
       const status = response.data.status;
-      // 50014:Token 过期了 50012:其他客户端登录了 50008:非法的token
-      if (status === "0") {
+      if (status == 1) {
         return response
       } else {
         const err = response.data.error;
         switch (typeof(err)) {
           case "string":
-            MessageBox.alert("请求失败", err);
+            MessageBox.alert("请求失败4", err);
             break;
           case "object":
-            MessageBox.alert("请求失败", Object.values(err).join());
+            MessageBox.alert("请求失败3", Object.values(err).join());
             break;
           case "array":
-            MessageBox.alert("请求失败", Object.values(err).join());
+            MessageBox.alert("请求失败2", Object.values(err).join());
             break;
         }
         return Promise.reject(response);
@@ -52,12 +51,7 @@ service.interceptors.response.use(
     }, error => {
       Indicator.close();
       console.log('err' + error);// for debug
-      MessageBox.alert("请求失败", error.message);
-      if(error.response.status===401){
-        store.dispatch('Logout').then(() => {
-          router.push({path: '/login'})
-        });
-      }
+      MessageBox.alert("请求失败1", error.message);
       return Promise.reject(error);
     }
 );
@@ -82,6 +76,18 @@ export function post(url, params) {
       reject(err)
     }).catch((error) => {
       reject(error)
+    });
+  })
+}
+
+export function del(url){
+  return new Promise((resolve,reject)=>{
+    service.del(url).then(response => {
+      resolve(response.data);
+    },err=>{
+      reject(err)
+    }).catch(err => {
+      reject(err)
     });
   })
 }

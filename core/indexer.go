@@ -35,11 +35,17 @@ func (i *Indexer) Init(option *types.IndexerOptions) {
 }
 
 func (i *Indexer) Add(doc *types.IndexedDocument) {
-	hash := geohash.EncodeWithPrecision(doc.Latitude, doc.Longitude, i.option.GeoPrecious)
 	sdocid := strconv.FormatUint(doc.DocId, 10)
+	hashs := i.hashshard(doc.DocId)
 	pip := i.client.Pipeline()
-	pip.HSet(i.hashshard(doc.DocId), sdocid, hash)
-	pip.HSet(i.geoshard(hash, doc.DocId), sdocid, doc)
+	//删除旧数据
+	oldhash, _ := i.client.HGet(hashs, sdocid).Result()
+	if len(oldhash)>0 {
+		pip.HDel(i.geoshard(oldhash,doc.DocId),sdocid)
+	}
+	newhash := geohash.EncodeWithPrecision(doc.Latitude, doc.Longitude, i.option.GeoPrecious)
+	pip.HSet(hashs, sdocid, newhash)
+	pip.HSet(i.geoshard(newhash, doc.DocId), sdocid, doc)
 	_, err := pip.Exec()
 	if err != nil {
 		log.Print(err)
