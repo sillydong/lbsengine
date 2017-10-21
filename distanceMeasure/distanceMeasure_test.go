@@ -11,7 +11,7 @@ const TEST_DATA_NUM = 5000000
 
 var arrPoint1 [TEST_DATA_NUM]EarthCoordinate                                           //测试数据组1
 var arrPoint2 [TEST_DATA_NUM]EarthCoordinate                                           //测试数据组2
-var precision float64 = 0.01                                                           //随机数生成的精度大小
+var precision float64 = 0.1                                                            //随机数生成的精度大小
 var benchmarkPoint EarthCoordinate = EarthCoordinate{longitude: 121.0, latitude: 31.0} //基准值
 var resultStardard, resultQuick, resultQuick2 [TEST_DATA_NUM]float64                   //各个算法的测距后得到的结果
 
@@ -78,6 +78,7 @@ func TestQuick(t *testing.T) {
 	t.Logf("平面近似二维距离算法（勾股定理,已预设城市经纬度）的耗时：%E ns\n", float64(after-before))
 }
 
+//计算标准差
 func TestCompare(t *testing.T) {
 	var variance, variance2 float64 = 0.0, 0.0
 	for i := 0; i < TEST_DATA_NUM; i++ {
@@ -86,7 +87,7 @@ func TestCompare(t *testing.T) {
 		variance += math.Pow(resultQuick[i]-resultStardard[i], 2)
 		variance2 += math.Pow(resultQuick2[i]-resultStardard[i], 2)
 	}
-	t.Logf("精度为%f度时，搜索范围距离在%f米内时, 标准差组1为%f米,组2为%f米\n",
+	t.Logf("精度为%f度时，换算以米为单位时表示搜索范围距离在%f米内时, 标准差组1为%f米,组2为%f米\n",
 		precision, DIST_PER_DEGREE*precision, math.Sqrt(variance/TEST_DATA_NUM), math.Sqrt(variance2/TEST_DATA_NUM))
 	return
 }
