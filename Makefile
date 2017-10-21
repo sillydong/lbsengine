@@ -7,13 +7,19 @@ GOGET=$(GOCMD) get
 BINARY_NAME=bin/example
 BINARY_UNIX=$(BINARY_NAME)_unix
 
-all: build
+all: build-view build build-linux
+build-view:
+	cd example/view && npm run build
+	cd example && go-bindata-assetfs view/dist/...
 build:
-	$(GOBUILD) -o $(BINARY_NAME) -v example/main.go
+	$(GOBUILD) -o $(BINARY_NAME) -v ./example/...
 clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
 	rm -f $(BINARY_UNIX)
+	rm -rf example/view/dist/*
+run-view:
+	cd example/view && npm run dev
 run:
 	$(GOBUILD) -o $(BINARY_NAME) -v example/main.go
 	./$(BINARY_NAME)
@@ -27,4 +33,4 @@ analysis:
 
 # Cross compilation
 build-linux:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_UNIX) example/main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_UNIX) ./example/...

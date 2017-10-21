@@ -13,6 +13,8 @@ import (
 	"strings"
 	"time"
 	"log"
+	"github.com/elazarl/go-bindata-assetfs"
+	"github.com/Code-Hex/echo-static"
 )
 
 func main() {
@@ -46,8 +48,17 @@ func main() {
 	//echo
 	addr := ":8877"
 	e := echo.New()
-	e.Use(middleware.Logger())
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Skipper:ResourceSkipper,
+	}))
 	e.Use(middleware.Recover())
+
+	e.Use(static.ServeRoot("/", &assetfs.AssetFS{
+		Asset:     Asset,
+		AssetDir:  AssetDir,
+		AssetInfo: AssetInfo,
+		Prefix:    "view/dist",
+	}))
 	api := e.Group("/api")
 	api.POST("/add", func(context echo.Context) error {
 		//解析对象
@@ -177,6 +188,14 @@ func main() {
 	})
 	e.Logger.Fatal(e.Start(addr))
 }
+
+func ResourceSkipper(c echo.Context) bool {
+	if strings.HasPrefix(c.Path(),"/static"){
+		return true
+	}
+	return false
+}
+
 
 type PoiData struct {
 	Id         int64   `db:"id" form:"-"`
