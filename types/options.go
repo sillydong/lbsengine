@@ -35,7 +35,7 @@ func (o *EngineOptions) Init() {
 	if o.DefaultSearchOption == nil {
 		o.DefaultSearchOption = &SearchOptions{
 			Refresh:  false,
-			OrderAsc: true,
+			OrderDesc: false,
 			Timeout:  2 * time.Second,
 			Accuracy: STANDARD,
 			Circles:  1,

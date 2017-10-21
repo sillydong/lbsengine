@@ -62,7 +62,7 @@ func BenchmarkStore(b *testing.B) {
 func TestSearch(t *testing.T) {
 	option := &types.SearchOptions{
 		Refresh:false,
-		OrderAsc:true,
+		OrderDesc:false,
 		Accuracy:types.STANDARD,
 		Circles:1,
 		Excepts: map[uint64]bool{
@@ -88,7 +88,7 @@ func TestSearch(t *testing.T) {
 func BenchmarkSearch(b *testing.B) {
 	option := &types.SearchOptions{
 		Refresh:false,
-		OrderAsc:true,
+		OrderDesc:false,
 		Accuracy:types.MEITUAN,
 		Circles:1,
 		//Excepts: map[uint64]bool{

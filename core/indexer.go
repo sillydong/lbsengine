@@ -128,6 +128,7 @@ func (i *Indexer) Search(countonly bool, hash string, latitude, longitude float6
 
 //距离计算
 func (i *Indexer) distance(accuracy int, alatitude, alongitude, blatitude, blongitude float64) float64 {
+	//fmt.Printf("%+v - %+v ------ %+v - %+v",alatitude,alongitude,blatitude,blongitude)
 	a := &distanceMeasure.EarthCoordinate{Latitude: alatitude, Longitude: alongitude}
 	b := &distanceMeasure.EarthCoordinate{Latitude: blatitude, Longitude: blongitude}
 	switch accuracy {

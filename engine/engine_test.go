@@ -7,48 +7,70 @@ import (
 	"unsafe"
 	"math/rand"
 	"github.com/sillydong/lbsengine/types"
+	"time"
+	"github.com/sillydong/goczd/godata"
 )
 
 var e *Engine
 func init() {
+	rand.Seed(time.Now().Unix())
 	e = &Engine{}
 	e.Init(nil)
 }
 
-func TestSearch(t *testing.T) {
-	result := e.Search(&types.SearchRequest{
-		Latitude: 40.7137674,
-		Longitude: -73.9525142,
-		Offset:0,
-		Limit:100,
-	})
-	fmt.Printf("%+v\n",result)
-}
-
-func BenchmarkSearch(b *testing.B) {
+func BenchmarkAdd(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		e.Search(&types.SearchRequest{
-			Latitude:  40.7137674,
-			Longitude: -73.9525142,
-			Offset:    0,
-			Limit:     100,
+		lat,lng := RandomPoint()
+		e.Add(&types.IndexedDocument{
+			DocId:uint64(i+80000),
+			Latitude:lat,
+			Longitude:lng,
+			Fields:map[string]string{
+				"a":"b",
+			},
 		})
 	}
 }
 
+func TestSearch(t *testing.T) {
+	lat,lng := RandomPoint()
+	fmt.Println(lat,lng)
+	result := e.Search(&types.SearchRequest{
+		Latitude: lat,
+		Longitude: lng,
+		Offset:0,
+		Limit:100,
+	})
+	fmt.Printf("%+v\n",result)
+	//x,_ := json.Marshal(result)
+	//fmt.Println(string(x))
+}
 
-func randomPoints(n int) [][2]float64 {
-	var points [][2]float64
-	for i := 0; i < n; i++ {
-		lat, lon := RandomPoint()
-		points = append(points, [2]float64{lat, lon})
+func BenchmarkSearch(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		lat,lng := RandomPoint()
+		e.Search(&types.SearchRequest{
+			Latitude:  lat,
+			Longitude: lng,
+			Offset:    0,
+			Limit:     10,
+			//SearchOption:&types.SearchOptions{
+			//	Refresh:false,
+			//	Circles:2,
+			//},
+		})
+		//fmt.Println(resp.Count)
 	}
-	return points
+}
+
+func TestPoint(t *testing.T) {
+	lat,lng := RandomPoint()
+	fmt.Printf("%+v - %+v",lat,lng)
 }
 
 func RandomPoint() (lat, lng float64) {
-	lat = -90 + 180*rand.Float64()
-	lng = -180 + 360*rand.Float64()
+	lat = 40.8137674 + godata.Round(rand.Float64()*0.01, 7)
+	lng = -73.8525142 + godata.Round(rand.Float64()*0.01, 7)
 	return
 }
 

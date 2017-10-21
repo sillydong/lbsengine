@@ -75,6 +75,7 @@ func (e *Engine) Search(request *types.SearchRequest) *types.SearchResponse {
 	if request.SearchOption == nil {
 		request.SearchOption = e.option.DefaultSearchOption
 	}
+	request.SearchOption.Init()
 
 	//是否刷新缓存
 	if !request.SearchOption.Refresh {
@@ -142,10 +143,10 @@ func (e *Engine) Search(request *types.SearchRequest) *types.SearchResponse {
 
 	//最终排序
 	if !request.CountOnly {
-		if request.SearchOption.OrderAsc {
-			sort.Sort(docs)
-		} else {
+		if request.SearchOption.OrderDesc {
 			sort.Sort(sort.Reverse(docs))
+		} else {
+			sort.Sort(docs)
 		}
 	}
 
