@@ -1,13 +1,13 @@
 package engine
 
 import (
-	"github.com/sillydong/lbsengine/core"
-	"github.com/sillydong/lbsengine/types"
 	"fmt"
 	"github.com/huichen/murmur"
+	"github.com/sillydong/lbsengine/core"
+	"github.com/sillydong/lbsengine/types"
+	"sort"
 	"strconv"
 	"time"
-	"sort"
 	"unsafe"
 )
 
@@ -67,7 +67,7 @@ func (e *Engine) Search(request *types.SearchRequest) (response *types.SearchRes
 	content := fmt.Sprintf("%v", request)
 	hash := murmur.Murmur3(tobytes(content))
 
-	shard := int(hash - hash/e.option.NumShards*e.option.NumShards)
+	shard := int(hash - hash/uint32(e.option.NumShards)*uint32(e.option.NumShards))
 
 	cachekey := fmt.Sprintf("%v", hash)
 	//是否刷新缓存
@@ -87,9 +87,9 @@ func (e *Engine) Search(request *types.SearchRequest) (response *types.SearchRes
 	//下发任务
 	for _, geo := range neighbours {
 		for i := 0; i < int(e.option.IndexerOption.GeoShard); i++ {
-			geoshard := "h_" + geo + "_" + strconv.Itoa(i);
+			geoshard := "h_" + geo + "_" + strconv.Itoa(i)
 			e.indexerSearchChannels[shard] <- &indexerSearchRequest{
-				countonly:request.CountOnly,
+				countonly:            request.CountOnly,
 				hash:                 geoshard,
 				latitude:             request.Latitude,
 				longitude:            request.Longitude,
@@ -135,32 +135,32 @@ func (e *Engine) Search(request *types.SearchRequest) (response *types.SearchRes
 	}
 
 	//最终排序
-	if !request.CountOnly{
-		if request.SearchOption.OrderAsc{
+	if !request.CountOnly {
+		if request.SearchOption.OrderAsc {
 			sort.Sort(docs)
-		}else{
+		} else {
 			sort.Sort(sort.Reverse(docs))
 		}
 	}
 
 	//写缓存
-	if len(docs)>0{
-		e.cacher.Set(cachekey,docs)
+	if len(docs) > 0 {
+		e.cacher.Set(cachekey, docs)
 	}
 
 	//拼返回数据
 	response.Count = count
-	if !request.CountOnly{
+	if !request.CountOnly {
 		start := request.Offset
-		stop := request.Offset+request.Limit
-		if start>count{
+		stop := request.Offset + request.Limit
+		if start > count {
 			response.Docs = nil
-		}else if stop>count{
+		} else if stop > count {
 			response.Docs = docs[start:]
-		}else{
+		} else {
 			response.Docs = docs[start:stop]
 		}
-	}else{
+	} else {
 		response.Docs = nil
 	}
 	response.Timeout = istimeout
@@ -172,10 +172,10 @@ func (e *Engine) Search(request *types.SearchRequest) (response *types.SearchRes
 func (e *Engine) shardid(docid uint64) int {
 	content := fmt.Sprintf("%d", docid)
 	hash := murmur.Murmur3(tobytes(content))
-	return int(hash - hash/e.option.NumShards*e.option.NumShards)
+	return int(hash - hash/uint32(e.option.NumShards)*uint32(e.option.NumShards))
 }
 
-func tobytes(s string)[]byte{
+func tobytes(s string) []byte {
 	x := (*[2]uintptr)(unsafe.Pointer(&s))
 	h := [3]uintptr{x[0], x[1], x[1]}
 	return *(*[]byte)(unsafe.Pointer(&h))

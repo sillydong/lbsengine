@@ -9,8 +9,8 @@ import (
 
 const TEST_DATA_NUM = 5000000
 
-var arrPoint1 [TEST_DATA_NUM]*EarthCoordinate                                           //测试数据组1
-var arrPoint2 [TEST_DATA_NUM]*EarthCoordinate                                           //测试数据组2
+var arrPoint1 [TEST_DATA_NUM]*EarthCoordinate                                          //测试数据组1
+var arrPoint2 [TEST_DATA_NUM]*EarthCoordinate                                          //测试数据组2
 var precision float64 = 0.1                                                            //随机数生成的精度大小
 var benchmarkPoint EarthCoordinate = EarthCoordinate{Longitude: 121.0, Latitude: 31.0} //基准值
 var resultStardard, resultQuick, resultQuick2 [TEST_DATA_NUM]float64                   //各个算法的测距后得到的结果

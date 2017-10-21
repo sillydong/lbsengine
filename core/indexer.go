@@ -2,12 +2,12 @@ package core
 
 import (
 	"github.com/go-redis/redis"
+	"github.com/mmcloughlin/geohash"
+	"github.com/sillydong/lbsengine/distanceMeasure"
 	"github.com/sillydong/lbsengine/types"
 	"log"
 	"strconv"
-	"github.com/mmcloughlin/geohash"
 	"unsafe"
-	"github.com/sillydong/lbsengine/distanceMeasure"
 )
 
 type Indexer struct {
