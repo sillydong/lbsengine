@@ -11,8 +11,8 @@ import (
 	"github.com/tinylib/msgp/msgp"
 )
 
-func TestMarshalUnmarshalStorerDocument(t *testing.T) {
-	v := StorerDocument{}
+func TestMarshalUnmarshalIndexedDocument(t *testing.T) {
+	v := IndexedDocument{}
 	bts, err := v.MarshalMsg(nil)
 	if err != nil {
 		t.Fatal(err)
@@ -34,8 +34,8 @@ func TestMarshalUnmarshalStorerDocument(t *testing.T) {
 	}
 }
 
-func BenchmarkMarshalMsgStorerDocument(b *testing.B) {
-	v := StorerDocument{}
+func BenchmarkMarshalMsgIndexedDocument(b *testing.B) {
+	v := IndexedDocument{}
 	b.ReportAllocs()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -43,8 +43,8 @@ func BenchmarkMarshalMsgStorerDocument(b *testing.B) {
 	}
 }
 
-func BenchmarkAppendMsgStorerDocument(b *testing.B) {
-	v := StorerDocument{}
+func BenchmarkAppendMsgIndexedDocument(b *testing.B) {
+	v := IndexedDocument{}
 	bts := make([]byte, 0, v.Msgsize())
 	bts, _ = v.MarshalMsg(bts[0:0])
 	b.SetBytes(int64(len(bts)))
@@ -55,8 +55,8 @@ func BenchmarkAppendMsgStorerDocument(b *testing.B) {
 	}
 }
 
-func BenchmarkUnmarshalStorerDocument(b *testing.B) {
-	v := StorerDocument{}
+func BenchmarkUnmarshalIndexedDocument(b *testing.B) {
+	v := IndexedDocument{}
 	bts, _ := v.MarshalMsg(nil)
 	b.ReportAllocs()
 	b.SetBytes(int64(len(bts)))
@@ -69,8 +69,8 @@ func BenchmarkUnmarshalStorerDocument(b *testing.B) {
 	}
 }
 
-func TestEncodeDecodeStorerDocument(t *testing.T) {
-	v := StorerDocument{}
+func TestEncodeDecodeIndexedDocument(t *testing.T) {
+	v := IndexedDocument{}
 	var buf bytes.Buffer
 	msgp.Encode(&buf, &v)
 
@@ -79,7 +79,7 @@ func TestEncodeDecodeStorerDocument(t *testing.T) {
 		t.Logf("WARNING: Msgsize() for %v is inaccurate", v)
 	}
 
-	vn := StorerDocument{}
+	vn := IndexedDocument{}
 	err := msgp.Decode(&buf, &vn)
 	if err != nil {
 		t.Error(err)
@@ -93,8 +93,8 @@ func TestEncodeDecodeStorerDocument(t *testing.T) {
 	}
 }
 
-func BenchmarkEncodeStorerDocument(b *testing.B) {
-	v := StorerDocument{}
+func BenchmarkEncodeIndexedDocument(b *testing.B) {
+	v := IndexedDocument{}
 	var buf bytes.Buffer
 	msgp.Encode(&buf, &v)
 	b.SetBytes(int64(buf.Len()))
@@ -107,8 +107,8 @@ func BenchmarkEncodeStorerDocument(b *testing.B) {
 	en.Flush()
 }
 
-func BenchmarkDecodeStorerDocument(b *testing.B) {
-	v := StorerDocument{}
+func BenchmarkDecodeIndexedDocument(b *testing.B) {
+	v := IndexedDocument{}
 	var buf bytes.Buffer
 	msgp.Encode(&buf, &v)
 	b.SetBytes(int64(buf.Len()))
