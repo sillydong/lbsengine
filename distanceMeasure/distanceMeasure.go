@@ -71,7 +71,7 @@ func (this *DistanceMeasure) MeasureByStardardMethod(pt1, pt2 EarthCoordinate) f
 }
 
 //未提前设置本地城市经纬度坐标的快速测距算法
-func (this *DistanceMeasure) MeasureByQuickMethodNotSetLocation(pt1, pt2 EarthCoordinate) float64 {
+func (this *DistanceMeasure) MeasureByQuickMethodWithoutLocation(pt1, pt2 EarthCoordinate) float64 {
 	diffLat := (pt1.latitude - pt2.latitude) //纬度差的实际距离，单位m
 	radLat := this.ChangeAngleToRadian((pt1.latitude + pt2.latitude) / 2)
 	diffLog := math.Cos(radLat) * (pt1.longitude - pt2.longitude) //经度差的实际距离，单位m,需要乘以cos(所在纬度),因为纬度越高时经度差的表示的实际距离越短
@@ -87,6 +87,7 @@ func (this *DistanceMeasure) MeasureByQuickMethod(pt1, pt2 EarthCoordinate) (flo
 		return 0.0, MeasureError{}
 	}
 	if this.IsFirstUse {
+		this.IsFirstUse = false
 		//第一次调用这个函数的时候打印城市名进行提示
 		var strLon, strLat string
 		if this.Benchmark.longitude >= 0 {
@@ -95,9 +96,9 @@ func (this *DistanceMeasure) MeasureByQuickMethod(pt1, pt2 EarthCoordinate) (flo
 			strLon = fmt.Sprintf("西经%f°", -this.Benchmark.longitude)
 		}
 		if this.Benchmark.latitude >= 0 {
-			strLat = fmt.Sprintf("北纬%f°", this.Benchmark.longitude)
+			strLat = fmt.Sprintf("北纬%f°", this.Benchmark.latitude)
 		} else {
-			strLat = fmt.Sprintf("南纬%f°", -this.Benchmark.longitude)
+			strLat = fmt.Sprintf("南纬%f°", -this.Benchmark.latitude)
 		}
 		fmt.Printf("本次快速测距算法设置的城市为%s,输入的基准经纬度坐标为[%s, %s]", this.cityName, strLon, strLat)
 		fmt.Println("如果当前保存的城市与你期望的城市不符，请重新调用SetLocalEarthCoordinate来设置")
