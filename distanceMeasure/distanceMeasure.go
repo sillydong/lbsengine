@@ -103,7 +103,7 @@ func (this *DistanceMeasure) MeasureByQuickMethod(pt1, pt2 *EarthCoordinate) (fl
 		} else {
 			strLat = fmt.Sprintf("南纬%f°", -this.Benchmark.Latitude)
 		}
-		fmt.Printf("本次快速测距算法设置的城市为%s,输入的基准经纬度坐标为[%s, %s]", this.cityName, strLon, strLat)
+		fmt.Printf("本次快速测距算法设置的城市为%s,输入的基准经纬度坐标为[%s, %s]\n", this.cityName, strLon, strLat)
 		fmt.Println("如果当前保存的城市与你期望的城市不符，请重新调用SetLocalEarthCoordinate来设置")
 	}
 
