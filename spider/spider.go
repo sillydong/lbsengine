@@ -3,10 +3,10 @@ package spider
 import (
 	"crypto/md5"
 	"fmt"
+	"github.com/sillydong/lbsengine/distanceMeasure"
 	"io/ioutil"
 	"net/http"
 	"sort"
-	"github.com/sillydong/lbsengine/distanceMeasure"
 )
 
 type PoiData struct {

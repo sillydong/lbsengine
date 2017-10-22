@@ -34,7 +34,7 @@ func (o *SearchOptions) Init() {
 
 const (
 	_        = iota
-	STANDARD  //传统计算方法
-	MEITUAN   //美团开放计算方法
-	IMPROVED  //优化的计算方法
+	STANDARD //传统计算方法
+	MEITUAN  //美团开放计算方法
+	IMPROVED //优化的计算方法
 )

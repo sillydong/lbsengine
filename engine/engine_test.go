@@ -3,15 +3,16 @@ package engine
 import (
 	"fmt"
 	"github.com/huichen/murmur"
-	"testing"
-	"unsafe"
-	"math/rand"
-	"github.com/sillydong/lbsengine/types"
-	"time"
 	"github.com/sillydong/goczd/godata"
+	"github.com/sillydong/lbsengine/types"
+	"math/rand"
+	"testing"
+	"time"
+	"unsafe"
 )
 
 var e *Engine
+
 func init() {
 	rand.Seed(time.Now().Unix())
 	e = &Engine{}
@@ -20,35 +21,35 @@ func init() {
 
 func BenchmarkAdd(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		lat,lng := RandomPoint()
+		lat, lng := RandomPoint()
 		e.Add(&types.IndexedDocument{
-			DocId:uint64(i),
-			Latitude:lat,
-			Longitude:lng,
-			Fields:map[string]string{
-				"a":"b",
+			DocId:     uint64(i),
+			Latitude:  lat,
+			Longitude: lng,
+			Fields: map[string]string{
+				"a": "b",
 			},
 		})
 	}
 }
 
 func TestSearch(t *testing.T) {
-	lat,lng := RandomPoint()
-	fmt.Println(lat,lng)
+	lat, lng := RandomPoint()
+	fmt.Println(lat, lng)
 	result := e.Search(&types.SearchRequest{
-		Latitude: lat,
+		Latitude:  lat,
 		Longitude: lng,
-		Offset:0,
-		Limit:100,
+		Offset:    0,
+		Limit:     100,
 	})
-	fmt.Printf("%+v\n",result)
+	fmt.Printf("%+v\n", result)
 	//x,_ := json.Marshal(result)
 	//fmt.Println(string(x))
 }
 
 func BenchmarkSearch(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		lat,lng := RandomPoint()
+		lat, lng := RandomPoint()
 		e.Search(&types.SearchRequest{
 			Latitude:  lat,
 			Longitude: lng,
@@ -64,8 +65,8 @@ func BenchmarkSearch(b *testing.B) {
 }
 
 func TestPoint(t *testing.T) {
-	lat,lng := RandomPoint()
-	fmt.Printf("%+v - %+v",lat,lng)
+	lat, lng := RandomPoint()
+	fmt.Printf("%+v - %+v", lat, lng)
 }
 
 func RandomPoint() (lat, lng float64) {

@@ -20,12 +20,12 @@ func (c *Cacher) Get(key string, offset, limit int) (types.ScoredDocuments, int)
 	if val, ok := c.client.Get(key); ok {
 		docs := val.(types.ScoredDocuments)
 		size := len(docs)
-		if offset>size{
-			return nil,size
-		}else if offset+limit>size{
-			return docs[offset:],size
-		}else{
-			return docs[offset:offset+limit],size
+		if offset > size {
+			return nil, size
+		} else if offset+limit > size {
+			return docs[offset:], size
+		} else {
+			return docs[offset : offset+limit], size
 		}
 	}
 	return nil, 0

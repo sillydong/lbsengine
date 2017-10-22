@@ -3,8 +3,8 @@ package core
 import (
 	"fmt"
 	"github.com/sillydong/lbsengine/types"
-	"testing"
 	"math/rand"
+	"testing"
 )
 
 var indexer *Indexer
@@ -38,33 +38,33 @@ func TestRemoveDocument(t *testing.T) {
 }
 
 func TestStore(t *testing.T) {
-	strs,err := indexer.client.HVals("h_dr5rt_1").Result()
+	strs, err := indexer.client.HVals("h_dr5rt_1").Result()
 	if err != nil {
 		t.Error(err)
 	}
-	docs := make([]types.IndexedDocument,0)
-	for _,str := range strs{
+	docs := make([]types.IndexedDocument, 0)
+	for _, str := range strs {
 		document := types.IndexedDocument{}
 		document.UnmarshalMsg([]byte(str))
-		docs = append(docs,document)
+		docs = append(docs, document)
 	}
-	fmt.Printf("%+v\n",docs)
+	fmt.Printf("%+v\n", docs)
 }
 
 func BenchmarkStore(b *testing.B) {
-	str, _ := indexer.client.HGet("h_dr5rt_1","1").Result()
+	str, _ := indexer.client.HGet("h_dr5rt_1", "1").Result()
 	for i := 0; i < b.N; i++ {
-			document := types.IndexedDocument{}
-			document.UnmarshalMsg(tobytes(str))
+		document := types.IndexedDocument{}
+		document.UnmarshalMsg(tobytes(str))
 	}
 }
 
 func TestSearch(t *testing.T) {
 	option := &types.SearchOptions{
-		Refresh:false,
-		OrderDesc:false,
-		Accuracy:types.STANDARD,
-		Circles:1,
+		Refresh:   false,
+		OrderDesc: false,
+		Accuracy:  types.STANDARD,
+		Circles:   1,
 		Excepts: map[uint64]bool{
 			1: true,
 		},
@@ -76,21 +76,21 @@ func TestSearch(t *testing.T) {
 			return false
 		},
 	}
-	docs,num := indexer.Search(false,"h_dr5rt_1", 40.7137674, -73.9525142,option)
+	docs, num := indexer.Search(false, "h_dr5rt_1", 40.7137674, -73.9525142, option)
 	fmt.Println(num)
-	if num>0{
-		for _,doc := range docs{
-			fmt.Printf("%+v\n",doc)
+	if num > 0 {
+		for _, doc := range docs {
+			fmt.Printf("%+v\n", doc)
 		}
 	}
 }
 
 func BenchmarkSearch(b *testing.B) {
 	option := &types.SearchOptions{
-		Refresh:false,
-		OrderDesc:false,
-		Accuracy:types.MEITUAN,
-		Circles:1,
+		Refresh:   false,
+		OrderDesc: false,
+		Accuracy:  types.MEITUAN,
+		Circles:   1,
 		//Excepts: map[uint64]bool{
 		//	1: true,
 		//},
@@ -108,14 +108,14 @@ func BenchmarkSearch(b *testing.B) {
 }
 
 func TestIdShard(t *testing.T) {
-	for i:=0;i<10;i++{
+	for i := 0; i < 10; i++ {
 		x := rand.Int()
-		fmt.Printf("%v -> %v\n",x,indexer.hashshard(uint64(x)))
+		fmt.Printf("%v -> %v\n", x, indexer.hashshard(uint64(x)))
 	}
 }
 
 func TestGeoShard(t *testing.T) {
 	for i := 0; i < 10; i++ {
-		fmt.Printf("%v -> %v\n",i,indexer.geoshard("asdfg", uint64(i)))
+		fmt.Printf("%v -> %v\n", i, indexer.geoshard("asdfg", uint64(i)))
 	}
 }

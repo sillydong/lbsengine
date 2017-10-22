@@ -4,7 +4,7 @@ package types
 type ScoredDocument struct {
 	Distance float64
 	DocId    uint64
-	Model    interface{}//为外围组装数据提供
+	Model    interface{} //为外围组装数据提供
 }
 
 //排序

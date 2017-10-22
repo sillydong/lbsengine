@@ -34,13 +34,13 @@ func (o *EngineOptions) Init() {
 	}
 	if o.DefaultSearchOption == nil {
 		o.DefaultSearchOption = &SearchOptions{
-			Refresh:  false,
+			Refresh:   false,
 			OrderDesc: false,
-			Timeout:  2 * time.Second,
-			Accuracy: STANDARD,
-			Circles:  1,
-			Excepts:  nil,
-			Filter:   nil,
+			Timeout:   2 * time.Second,
+			Accuracy:  STANDARD,
+			Circles:   1,
+			Excepts:   nil,
+			Filter:    nil,
 		}
 	}
 	if o.IndexerOption == nil {
@@ -64,5 +64,5 @@ type IndexerOptions struct {
 	GeoPrecious     uint    //GEOHASH位数
 	CenterLatitude  float64 //城市中心纬度
 	CenterLongitude float64 //城市中心经度
-	Location string //城市
+	Location        string  //城市
 }

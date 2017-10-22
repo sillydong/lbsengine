@@ -173,7 +173,7 @@ func (e *Engine) Search(request *types.SearchRequest) *types.SearchResponse {
 	}
 	response.Timeout = istimeout
 
-	return  response
+	return response
 
 }
 

@@ -40,8 +40,8 @@ func (i *Indexer) Add(doc *types.IndexedDocument) {
 	pip := i.client.Pipeline()
 	//删除旧数据
 	oldhash, _ := i.client.HGet(hashs, sdocid).Result()
-	if len(oldhash)>0 {
-		pip.HDel(i.geoshard(oldhash,doc.DocId),sdocid)
+	if len(oldhash) > 0 {
+		pip.HDel(i.geoshard(oldhash, doc.DocId), sdocid)
 	}
 	newhash := geohash.EncodeWithPrecision(doc.Latitude, doc.Longitude, i.option.GeoPrecious)
 	pip.HSet(hashs, sdocid, newhash)

@@ -2,19 +2,19 @@ package main
 
 import (
 	"database/sql"
+	"github.com/Code-Hex/echo-static"
+	"github.com/elazarl/go-bindata-assetfs"
 	"github.com/go-gorp/gorp"
 	"github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/sillydong/lbsengine/engine"
 	"github.com/sillydong/lbsengine/types"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
-	"log"
-	"github.com/elazarl/go-bindata-assetfs"
-	"github.com/Code-Hex/echo-static"
 )
 
 func main() {
@@ -49,7 +49,7 @@ func main() {
 	addr := ":8877"
 	e := echo.New()
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Skipper:ResourceSkipper,
+		Skipper: ResourceSkipper,
 	}))
 	e.Use(middleware.Recover())
 
@@ -91,7 +91,7 @@ func main() {
 				Status: 1,
 				Data:   "添加成功",
 			})
-		}else{
+		} else {
 			return context.JSON(http.StatusInternalServerError, Response{
 				Status: 0,
 				Error:  "数据库写入失败",
@@ -146,17 +146,17 @@ func main() {
 				context.Logger().Error(err)
 			}
 
-			datasmap := make(map[uint64]PoiData,len(datas))
+			datasmap := make(map[uint64]PoiData, len(datas))
 			for _, data := range datas {
-				datasmap[uint64(data.Id)]=data
+				datasmap[uint64(data.Id)] = data
 			}
-			for _,doc := range resp.Docs {
+			for _, doc := range resp.Docs {
 				doc.Model = datasmap[doc.DocId]
 			}
 
 			return context.JSON(http.StatusOK, Response{
 				Status: 1,
-				Data: resp,
+				Data:   resp,
 			})
 		} else {
 			return context.JSON(http.StatusOK, Response{
@@ -172,9 +172,9 @@ func main() {
 			context.Logger().Error(err)
 		}
 
-		context.Logger().Printf("about to import %v lines",len(datas))
+		context.Logger().Printf("about to import %v lines", len(datas))
 
-		for _,item:= range datas{
+		for _, item := range datas {
 			context.Logger().Print(item.Id)
 			eg.Add(&types.IndexedDocument{
 				DocId:     uint64(item.Id),
@@ -190,12 +190,11 @@ func main() {
 }
 
 func ResourceSkipper(c echo.Context) bool {
-	if strings.HasPrefix(c.Path(),"/static"){
+	if strings.HasPrefix(c.Path(), "/static") {
 		return true
 	}
 	return false
 }
-
 
 type PoiData struct {
 	Id         int64   `db:"id" form:"-"`
@@ -204,7 +203,7 @@ type PoiData struct {
 	Location   string  `db:"location" form:"location"`
 	Latitude   float64 `db:"latitude" form:"latitude"`
 	Longitude  float64 `db:"longitude" form:"longitude"`
-	CreateTime string   `db:"create_time" form:"create_time"`
+	CreateTime string  `db:"create_time" form:"create_time"`
 }
 
 type Response struct {

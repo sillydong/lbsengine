@@ -33,7 +33,7 @@ func (e *Engine) indexerRemoveWorker(shard int) {
 }
 
 func (e *Engine) indexerSearchWorker(shard int) {
-	for{
+	for {
 		request := <-e.indexerSearchChannels[shard]
 		docs, count := e.indexer.Search(request.countonly, request.hash, request.latitude, request.longitude, request.option)
 		request.indexerReturnChannel <- &indexerSearchResponse{docs: docs, count: count}

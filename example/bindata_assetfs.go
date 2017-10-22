@@ -15,10 +15,10 @@
 package main
 
 import (
-	"github.com/elazarl/go-bindata-assetfs"
 	"bytes"
 	"compress/gzip"
 	"fmt"
+	"github.com/elazarl/go-bindata-assetfs"
 	"io"
 	"io/ioutil"
 	"os"
@@ -330,16 +330,16 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"view/dist/lbs.html": viewDistLbsHtml,
+	"view/dist/lbs.html":                                            viewDistLbsHtml,
 	"view/dist/static/css/app.c986efd42b57e9ba5ea2d67e3e551bde.css": viewDistStaticCssAppC986efd42b57e9ba5ea2d67e3e551bdeCss,
-	"view/dist/static/js/0.d2c7cfbc10d7db8fea1f.js": viewDistStaticJs0D2c7cfbc10d7db8fea1fJs,
-	"view/dist/static/js/0.d2c7cfbc10d7db8fea1f.js.map": viewDistStaticJs0D2c7cfbc10d7db8fea1fJsMap,
-	"view/dist/static/js/app.a8fb1c9ab1929901b54d.js": viewDistStaticJsAppA8fb1c9ab1929901b54dJs,
-	"view/dist/static/js/app.a8fb1c9ab1929901b54d.js.map": viewDistStaticJsAppA8fb1c9ab1929901b54dJsMap,
-	"view/dist/static/js/manifest.62397a243c24ed9fbad7.js": viewDistStaticJsManifest62397a243c24ed9fbad7Js,
-	"view/dist/static/js/manifest.62397a243c24ed9fbad7.js.map": viewDistStaticJsManifest62397a243c24ed9fbad7JsMap,
-	"view/dist/static/js/vendor.114f82124aca53738c61.js": viewDistStaticJsVendor114f82124aca53738c61Js,
-	"view/dist/static/js/vendor.114f82124aca53738c61.js.map": viewDistStaticJsVendor114f82124aca53738c61JsMap,
+	"view/dist/static/js/0.d2c7cfbc10d7db8fea1f.js":                 viewDistStaticJs0D2c7cfbc10d7db8fea1fJs,
+	"view/dist/static/js/0.d2c7cfbc10d7db8fea1f.js.map":             viewDistStaticJs0D2c7cfbc10d7db8fea1fJsMap,
+	"view/dist/static/js/app.a8fb1c9ab1929901b54d.js":               viewDistStaticJsAppA8fb1c9ab1929901b54dJs,
+	"view/dist/static/js/app.a8fb1c9ab1929901b54d.js.map":           viewDistStaticJsAppA8fb1c9ab1929901b54dJsMap,
+	"view/dist/static/js/manifest.62397a243c24ed9fbad7.js":          viewDistStaticJsManifest62397a243c24ed9fbad7Js,
+	"view/dist/static/js/manifest.62397a243c24ed9fbad7.js.map":      viewDistStaticJsManifest62397a243c24ed9fbad7JsMap,
+	"view/dist/static/js/vendor.114f82124aca53738c61.js":            viewDistStaticJsVendor114f82124aca53738c61Js,
+	"view/dist/static/js/vendor.114f82124aca53738c61.js.map":        viewDistStaticJsVendor114f82124aca53738c61JsMap,
 }
 
 // AssetDir returns the file names below a certain
@@ -381,6 +381,7 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
 	"view": &bintree{nil, map[string]*bintree{
 		"dist": &bintree{nil, map[string]*bintree{
@@ -390,14 +391,14 @@ var _bintree = &bintree{nil, map[string]*bintree{
 					"app.c986efd42b57e9ba5ea2d67e3e551bde.css": &bintree{viewDistStaticCssAppC986efd42b57e9ba5ea2d67e3e551bdeCss, map[string]*bintree{}},
 				}},
 				"js": &bintree{nil, map[string]*bintree{
-					"0.d2c7cfbc10d7db8fea1f.js": &bintree{viewDistStaticJs0D2c7cfbc10d7db8fea1fJs, map[string]*bintree{}},
-					"0.d2c7cfbc10d7db8fea1f.js.map": &bintree{viewDistStaticJs0D2c7cfbc10d7db8fea1fJsMap, map[string]*bintree{}},
-					"app.a8fb1c9ab1929901b54d.js": &bintree{viewDistStaticJsAppA8fb1c9ab1929901b54dJs, map[string]*bintree{}},
-					"app.a8fb1c9ab1929901b54d.js.map": &bintree{viewDistStaticJsAppA8fb1c9ab1929901b54dJsMap, map[string]*bintree{}},
-					"manifest.62397a243c24ed9fbad7.js": &bintree{viewDistStaticJsManifest62397a243c24ed9fbad7Js, map[string]*bintree{}},
+					"0.d2c7cfbc10d7db8fea1f.js":            &bintree{viewDistStaticJs0D2c7cfbc10d7db8fea1fJs, map[string]*bintree{}},
+					"0.d2c7cfbc10d7db8fea1f.js.map":        &bintree{viewDistStaticJs0D2c7cfbc10d7db8fea1fJsMap, map[string]*bintree{}},
+					"app.a8fb1c9ab1929901b54d.js":          &bintree{viewDistStaticJsAppA8fb1c9ab1929901b54dJs, map[string]*bintree{}},
+					"app.a8fb1c9ab1929901b54d.js.map":      &bintree{viewDistStaticJsAppA8fb1c9ab1929901b54dJsMap, map[string]*bintree{}},
+					"manifest.62397a243c24ed9fbad7.js":     &bintree{viewDistStaticJsManifest62397a243c24ed9fbad7Js, map[string]*bintree{}},
 					"manifest.62397a243c24ed9fbad7.js.map": &bintree{viewDistStaticJsManifest62397a243c24ed9fbad7JsMap, map[string]*bintree{}},
-					"vendor.114f82124aca53738c61.js": &bintree{viewDistStaticJsVendor114f82124aca53738c61Js, map[string]*bintree{}},
-					"vendor.114f82124aca53738c61.js.map": &bintree{viewDistStaticJsVendor114f82124aca53738c61JsMap, map[string]*bintree{}},
+					"vendor.114f82124aca53738c61.js":       &bintree{viewDistStaticJsVendor114f82124aca53738c61Js, map[string]*bintree{}},
+					"vendor.114f82124aca53738c61.js.map":   &bintree{viewDistStaticJsVendor114f82124aca53738c61JsMap, map[string]*bintree{}},
 				}},
 			}},
 		}},
@@ -450,7 +451,6 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-
 
 func assetFS() *assetfs.AssetFS {
 	assetInfo := func(path string) (os.FileInfo, error) {
