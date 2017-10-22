@@ -4,9 +4,9 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io/ioutil"
-	"lbsengine/distanceMeasure"
 	"net/http"
 	"sort"
+	"github.com/sillydong/lbsengine/distanceMeasure"
 )
 
 type PoiData struct {
