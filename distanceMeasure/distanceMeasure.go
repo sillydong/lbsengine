@@ -16,11 +16,11 @@ const DIST_PER_DEGREE = math.Pi * 35433.88889 // πr/180° 解释为每度所表
 var localMeasure *DistanceMeasure = nil
 
 type DistanceMeasure struct {
-	IsSetLocation bool            //是否设置了本地基准经纬度
+	IsSetLocation bool             //是否设置了本地基准经纬度
 	Benchmark     *EarthCoordinate //基准坐标
-	cosLatitude   float64         //math.Cos(Benchmark.latitude) 基准维度的cos值
-	cityName      string          //城市名，可以不填，打印使用的
-	IsFirstUse    bool            //是否是第一次使用，在GetInstance使用后置为ture
+	cosLatitude   float64          //math.Cos(Benchmark.latitude) 基准维度的cos值
+	cityName      string           //城市名，可以不填，打印使用的
+	IsFirstUse    bool             //是否是第一次使用，在GetInstance使用后置为ture
 }
 
 type MeasureError struct {
@@ -52,12 +52,14 @@ func (this *DistanceMeasure) SetLocalEarthCoordinate(location *EarthCoordinate, 
 	this.Benchmark = location                                                //用于QuickMethod的本地经纬度坐标
 	this.cityName = name                                                     //城市名，打印使用
 	this.cosLatitude = math.Cos(this.ChangeAngleToRadian(location.Latitude)) //基准维度的cos值
+	fmt.Println("设置了城市坐标，城市名：", name, "经纬度坐标：", location)
 }
 
 func (this *DistanceMeasure) ChangeAngleToRadian(angle float64) float64 {
 	return angle / 180.0 * math.Pi
 }
 
+//标准球体测距算法，基准算法，基于球面模型来处理的（立体几何），即Haversine公式
 func (this *DistanceMeasure) MeasureByStardardMethod(pt1, pt2 *EarthCoordinate) float64 {
 	//先把角度转成弧度
 	lon1 := this.ChangeAngleToRadian(pt1.Longitude)
@@ -83,6 +85,7 @@ func (this *DistanceMeasure) MeasureByQuickMethodWithoutLocation(pt1, pt2 *Earth
 //已提前设置本地城市经纬度坐标的快速测距算法
 func (this *DistanceMeasure) MeasureByQuickMethod(pt1, pt2 *EarthCoordinate) (float64, error) {
 	//先判断是否已经输入了本地基准经纬度坐标
+
 	if this.IsSetLocation == false {
 		return 0.0, MeasureError{}
 	}
