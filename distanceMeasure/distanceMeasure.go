@@ -1,8 +1,15 @@
 package distanceMeasure
 
 /*
-使用本package的DistanceMeasure结构体建议是用GetInstance来获取对象，而不建议自己直接new。
-因为如果自己new可能会在切换城市的时候忘记设置本地的location
+使用本package的DistanceMeasure结构体建议使用GetInstance和CreateNewMeasure来获取对象，
+而不建议自己直接new。因为如果自己new可能会在切换城市的时候忘记设置本地的location
+GetInstance和CreateNewMeasure的区别是：
+1.如果一个进程同时只为一个城市或一个区（比如上海这么人口密集的城市可以一个区一个基准坐标，这样误差也会小）服务，
+那么建议使用GetInstance通常只需要在启动时以读入配置文件的配置项的方式来设置就行了。
+2.如果一个进程同时为多个城市或者多个区服务，那么建议使用CreateNewMeasure，这样调用SetLocalEarthCoordinate
+设置本地城市坐标时才不会互相覆盖和影响
+MeasureByStardardMethod的数学推导：http://blog.csdn.net/liminlu0314/article/details/8553926
+MeasureByQuickMethodWithoutLocation的参考链接：https://tech.meituan.com/lucene-distance.html
 */
 
 import (
@@ -44,6 +51,15 @@ func GetInstance() *DistanceMeasure {
 	}
 	localMeasure.IsFirstUse = true
 	return localMeasure
+}
+
+//创建一个新的DistanceMeasure对象
+func CreateNewMeasure() *DistanceMeasure{
+	measure := new(DistanceMeasure)
+	measure.IsSetLocation = false
+	measure.Benchmark = &EarthCoordinate{0.0, 0.0}
+	measure.IsFirstUse = true
+	return measure
 }
 
 //设置本地的基准坐标，可以取一个城市的市中心，EarthCoordinate必须要输入所在城市的经纬度坐标，name值（城市名）可以为空
