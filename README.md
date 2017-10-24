@@ -3,7 +3,7 @@ LBSENGINE
 
 ## What
 
-LBSENGINE实现了一个通用的GEO索引引擎
+LBSENGINE实现了一个通用的GEO索引引擎,[2017Go基金会中国黑客马拉松](http://gohack2017.golangfoundation.org/)参赛项目，获得一等奖。
 
 ## How
 
@@ -11,13 +11,18 @@ LBSENGINE实现了一个通用的GEO索引引擎
 
 开发可参考`example`中的代码实现
 
+## Who
+
+- [sillydong](https://github.com/sillydong)
+
+- [3zhen](https://github.com/3zheng)
+
 ## Todo
 
 1. 维护一份内存索引，启动时从永久存储初始化内存索引
 2. 优化序列化/反序列化方法
 3. 参考Redis优化geohash算法
 4. ...
-
 
 ## Thanks
 
